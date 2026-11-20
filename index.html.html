@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liverpool FC Thailand | You'll Never Walk Alone</title>
+    
+    <!-- โหลดฟอนต์ภาษาไทยและอังกฤษจาก Google Fonts (Prompt & Montserrat) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- โหลด Tailwind CSS สำหรับจัดการ Layout และ Responsive Design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- โหลด Font Awesome สำหรับไอคอนกีฬา ถ้วยรางวัล และโซเชียล -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- ตั้งค่าสีประจำสโมสรและฟอนต์ใน Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        lfc: {
+                            red: '#C8102E',       // สีแดงหลักของลิเวอร์พูล
+                            darkRed: '#8C0B20',   // สีแดงเบอร์กันดีเข้มสำหรับ Hover / Gradient
+                            teal: '#00B2A9',      // สีเขียวนกเป็ดน้ำ (Liver Bird Accent)
+                            gold: '#D4AF37',      // สีทองสำหรับถ้วยรางวัลและไฮไลต์
+                            lightGold: '#F6EB61', // สีเหลืองทองสว่าง
+                            dark: '#111827',      // สีเข้มสำหรับข้อความหลัก (High Contrast)
+                            gray: '#F8F9FA'       // สีพื้นหลังเทาอ่อนสะอาดตา
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Prompt', 'sans-serif'],
+                        display: ['Montserrat', 'Prompt', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- =========================================================================
+         ส่วนของ CSS เพิ่มเติม (Custom Styles & Animations)
+         สามารถปรับแต่งสี Gradient, เงา และแอนิเมชันเพิ่มเติมได้ที่นี่
+    ========================================================================== -->
+    <style>
+        /* พื้นหลัง Hero Gradient โทนสีแดงลิเวอร์พูล */
+        .lfc-hero-bg {
+            background: linear-gradient(135deg, #8C0B20 0%, #C8102E 55%, #680716 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ลวดลายเรขาคณิตจางๆ บนพื้นหลัง Hero เพื่อเพิ่มมิติ (Visual Depth) */
+        .lfc-hero-pattern {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1.5px, transparent 1.5px);
+            background-size: 28px 28px;
+        }
+
+        /* เอฟเฟกต์ Hover สำหรับการ์ดต่างๆ ตามหลัก UX Feedback */
+        .ux-card {
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .ux-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 32px -8px rgba(200, 16, 46, 0.18);
+        }
+
+        /* แอนิเมชันเปิด Modal */
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        .modal-animate {
+            animation: modalFadeIn 0.25s ease-out forwards;
+        }
+
+        /* ซ่อน Scrollbar แนวนอนสำหรับแถบ Filter บนมือถือ */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-white text-lfc-dark font-sans antialiased selection:bg-lfc-red selection:text-white">
+
+    <!-- =========================================================================
+         1. แถบเมนูนำทาง (STICKY NAVIGATION BAR)
+         รองรับทั้งหน้าจอ Desktop และ Mobile (Hamburger Menu)
+    ========================================================================== -->
+    <header class="sticky top-0 z-40 bg-lfc-red/95 backdrop-blur-md text-white shadow-lg border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- โลโก้และชื่อเว็บไซต์ -->
+                <a href="#home" class="flex items-center space-x-3 group focus:outline-none">
+                    <!-- ไอคอนโล่สโมสรแบบ SVG -->
+                    <div class="w-11 h-11 rounded-xl bg-white text-lfc-red flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+                        <i class="fa-solid fa-shield-halved text-2xl"></i>
+                    </div>
+                    <div>
+                        <span class="font-display font-extrabold text-lg sm:text-xl tracking-wider block leading-none">LIVERPOOL FC</span>
+                        <span class="text-xs text-lfc-lightGold font-medium tracking-widest uppercase">Thailand Fan Club</span>
+                    </div>
+                </a>
+
+                <!-- เมนูสำหรับหน้าจอ Desktop -->
+                <nav class="hidden md:flex items-center space-x-1 lg:space-x-2">
+                    <a href="#home" class="px-3.5 py-2 rounded-lg text-sm font-medium hover:bg-lfc-darkRed transition-colors">หน้าแรก</a>
+                    <a href="#history" class="px-3.5 py-2 rounded-lg text-sm font-medium hover:bg-lfc-darkRed transition-colors">ประวัติสโมสร</a>
+                    <a href="#squad" class="px-3.5 py-2 rounded-lg text-sm font-medium hover:bg-lfc-darkRed transition-colors">รายชื่อผู้เล่น</a>
+                    <a href="#honours" class="px-3.5 py-2 rounded-lg text-sm font-medium hover:bg-lfc-darkRed transition-colors">ผลงานและแชมป์</a>
+                    <a href="#contact" class="ml-2 px-4 py-2.5 rounded-xl bg-white text-lfc-red font-semibold text-sm hover:bg-lfc-lightGold hover:text-lfc-dark transition-all shadow-sm">
+                        <i class="fa-solid fa-code mr-1.5"></i>ติดต่อผู้พัฒนา
+                    </a>
+                </nav>
+
+                <!-- ปุ่ม Hamburger Menu สำหรับมือถือ -->
+                <button id="mobile-menu-btn" aria-label="เปิดเมนูนำทาง" class="md:hidden p-2.5 rounded-xl bg-lfc-darkRed/60 hover:bg-lfc-darkRed text-white focus:outline-none">
+                    <i id="mobile-menu-icon" class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- เมนู Dropdown สำหรับหน้าจอมือถือ -->
+        <div id="mobile-menu" class="hidden md:hidden bg-lfc-darkRed border-t border-white/10 px-4 pt-2 pb-5 space-y-1.5 shadow-xl">
+            <a href="#home" class="mobile-nav-link block px-4 py-3 rounded-xl text-base font-medium hover:bg-lfc-red transition-colors">หน้าแรก</a>
+            <a href="#history" class="mobile-nav-link block px-4 py-3 rounded-xl text-base font-medium hover:bg-lfc-red transition-colors">ประวัติการก่อตั้งทีม</a>
+            <a href="#squad" class="mobile-nav-link block px-4 py-3 rounded-xl text-base font-medium hover:bg-lfc-red transition-colors">รายชื่อผู้เล่นชุดใหญ่</a>
+            <a href="#honours" class="mobile-nav-link block px-4 py-3 rounded-xl text-base font-medium hover:bg-lfc-red transition-colors">ผลงานตั้งแต่อดีตถึงปัจจุบัน</a>
+            <a href="#contact" class="mobile-nav-link block px-4 py-3 rounded-xl text-base font-semibold bg-white text-lfc-red mt-2 text-center">ติดต่อผู้พัฒนาเว็บไซต์</a>
+        </div>
+    </header>
+
+    <!-- =========================================================================
+         2. ส่วนหัวเว็บหลัก (HERO SECTION)
+         เน้นความชัดเจนของคำขวัญสโมสรและปุ่ม Call-to-Action (CTA)
+    ========================================================================== -->
+    <section id="home" class="lfc-hero-bg text-white py-20 sm:py-28 lg:py-32">
+        <div class="lfc-hero-pattern absolute inset-0 pointer-events-none"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <!-- ข้อความต้อนรับและ CTA -->
+                <div class="lg:col-span-7 text-center lg:text-left">
+                    <div class="inline-flex items-center px-4 py-1.5 rounded-full bg-white/15 backdrop-blur-sm border border-white/20 text-lfc-lightGold text-xs sm:text-sm font-semibold tracking-wider uppercase mb-6">
+                        <i class="fa-solid fa-star mr-2"></i> Est. 1892 • Anfield, Liverpool
+                    </div>
+                    
+                    <h1 class="font-display font-black text-4xl sm:text-5xl lg:text-6xl tracking-tight leading-tight mb-6">
+                        YOU'LL NEVER <br class="hidden sm:inline">
+                        <span class="text-lfc-lightGold">WALK ALONE</span>
+                    </h1>
+                    
+                    <p class="text-base sm:text-lg text-white/90 font-light max-w-2xl mx-auto lg:mx-0 leading-relaxed mb-8">
+                        ยินดีต้อนรับสู่ศูนย์รวมเรื่องราวของสโมสรฟุตบอลลิเวอร์พูล "หงส์แดง" แห่งเมอร์ซีย์ไซด์ 
+                        เจาะลึกประวัติศาสตร์อันยิ่งใหญ่ รายชื่อนักเตะชุดปัจจุบัน และทำเนียบแชมป์ตั้งแต่อดีตจนถึงปัจจุบัน
+                    </p>
+                    
+                    <!-- ปุ่ม Call to Action -->
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                        <a href="#history" class="w-full sm:w-auto px-7 py-4 rounded-xl bg-white text-lfc-red font-bold text-base hover:bg-lfc-lightGold hover:text-lfc-dark transition-all shadow-lg flex items-center justify-center">
+                            <i class="fa-solid fa-book-open mr-2.5"></i> สำรวจประวัติศาสตร์ทีม
+                        </a>
+                        <a href="#squad" class="w-full sm:w-auto px-7 py-4 rounded-xl bg-lfc-darkRed/80 border border-white/30 text-white font-semibold text-base hover:bg-lfc-teal hover:border-lfc-teal transition-all flex items-center justify-center">
+                            <i class="fa-solid fa-users mr-2.5"></i> ดูรายชื่อนักเตะชุดใหญ่
+                        </a>
+                    </div>
+                </div>
+
+                <!-- กราฟิกสถิติเด่นด้านขวา (Visual Card) -->
+                <div class="lg:col-span-5">
+                    <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-6 sm:p-8 shadow-2xl">
+                        <div class="flex items-center justify-between border-b border-white/15 pb-4 mb-6">
+                            <div>
+                                <span class="text-xs uppercase tracking-widest text-lfc-lightGold font-semibold">The Reds Legacy</span>
+                                <h2 class="text-xl font-bold mt-0.5">ความภาคภูมิใจแห่งแอนฟิลด์</h2>
+                            </div>
+                            <div class="w-12 h-12 rounded-2xl bg-lfc-teal flex items-center justify-center text-white shadow-lg">
+                                <i class="fa-solid fa-trophy text-xl"></i>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-black/20 rounded-2xl p-4 text-center">
+                                <div class="font-display font-extrabold text-3xl sm:text-4xl text-lfc-lightGold">19</div>
+                                <div class="text-xs sm:text-sm text-white/80 mt-1">แชมป์ลีกสูงสุดอังกฤษ</div>
+                            </div>
+                            <div class="bg-black/20 rounded-2xl p-4 text-center">
+                                <div class="font-display font-extrabold text-3xl sm:text-4xl text-lfc-teal">6</div>
+                                <div class="text-xs sm:text-sm text-white/80 mt-1">ยูฟ่า แชมเปียนส์ลีก</div>
+                            </div>
+                            <div class="bg-black/20 rounded-2xl p-4 text-center">
+                                <div class="font-display font-extrabold text-3xl sm:text-4xl text-white">1892</div>
+                                <div class="text-xs sm:text-sm text-white/80 mt-1">ปีที่ก่อตั้งสโมสร</div>
+                            </div>
+                            <div class="bg-black/20 rounded-2xl p-4 text-center">
+                                <div class="font-display font-extrabold text-3xl sm:text-4xl text-lfc-lightGold">61,276</div>
+                                <div class="text-xs sm:text-sm text-white/80 mt-1">ความจุสนามแอนฟิลด์</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =========================================================================
+         3. ส่วนประวัติการก่อตั้งทีม (CLUB HISTORY SECTION)
+         แสดงไทม์ไลน์สำคัญ พร้อมปุ่ม "อ่านเพิ่มเติม" ที่เปิด Modal แสดงเนื้อหาเต็ม
+    ========================================================================== -->
+    <section id="history" class="py-20 bg-lfc-gray">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- หัวข้อ Section -->
+            <div class="text-center max-w-3xl mx-auto mb-14">
+                <span class="text-lfc-teal font-bold text-sm uppercase tracking-widest">Our Heritage</span>
+                <h2 class="text-3xl sm:text-4xl font-bold text-lfc-dark mt-2 mb-4">ประวัติการก่อตั้งและยุคสมัยอันยิ่งใหญ่</h2>
+                <p class="text-gray-600 text-base sm:text-lg">
+                    จุดเริ่มต้นจากความขัดแย้งในสนามแอนฟิลด์เมื่อปี ค.ศ. 1892 สู่การเป็นหนึ่งในสโมสรฟุตบอลที่ประสบความสำเร็จและมีแฟนบอลรักมากที่สุดในโลก (คลิก "อ่านเพิ่มเติม" เพื่อเจาะลึกแต่ละยุค)
+                </p>
+            </div>
+
+            <!-- Grid การ์ดประวัติศาสตร์ (ข้อมูลถูกดึงมาจาก JavaScript ด้านล่างเพื่อให้แก้ไขง่าย) -->
+            <div id="history-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- การ์ดประวัติศาสตร์จะถูกสร้างอัตโนมัติจาก JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- =========================================================================
+         4. ส่วนรายชื่อผู้เล่นชุดใหญ่ (FIRST TEAM SQUAD)
+         มีระบบ Filter กรองตามตำแหน่ง และคลิกดูประวัตินักเตะแต่ละคนได้
+    ========================================================================== -->
+    <section id="squad" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- หัวข้อ Section -->
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
+                <div>
+                    <span class="text-lfc-red font-bold text-sm uppercase tracking-widest">First Team Squad</span>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-lfc-dark mt-2">รายชื่อนักเตะชุดใหญ่</h2>
+                    <p class="text-gray-600 mt-2">เลือกกรองตามตำแหน่ง หรือคลิกที่การ์ดนักเตะเพื่ออ่านประวัติและจุดเด่น</p>
+                </div>
+
+                <!-- แถบปุ่มกรองตำแหน่ง (Filter Tabs) -->
+                <div class="flex items-center space-x-2 overflow-x-auto no-scrollbar pb-2 md:pb-0" role="tablist">
+                    <button onclick="filterPlayers('all')" data-filter="all" class="filter-btn active px-4 py-2.5 rounded-xl text-sm font-semibold bg-lfc-red text-white shadow-sm whitespace-nowrap transition-all">
+                        ทั้งหมด
+                    </button>
+                    <button onclick="filterPlayers('GK')" data-filter="GK" class="filter-btn px-4 py-2.5 rounded-xl text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 whitespace-nowrap transition-all">
+                        ผู้รักษาประตู (GK)
+                    </button>
+                    <button onclick="filterPlayers('DF')" data-filter="DF" class="filter-btn px-4 py-2.5 rounded-xl text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 whitespace-nowrap transition-all">
+                        กองหลัง (DF)
+                    </button>
+                    <button onclick="filterPlayers('MF')" data-filter="MF" class="filter-btn px-4 py-2.5 rounded-xl text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 whitespace-nowrap transition-all">
+                        กองกลาง (MF)
+                    </button>
+                    <button onclick="filterPlayers('FW')" data-filter="FW" class="filter-btn px-4 py-2.5 rounded-xl text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 whitespace-nowrap transition-all">
+                        กองหน้า (FW)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Grid แสดงการ์ดนักเตะ (สร้างจากข้อมูลใน JS) -->
+            <div id="players-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- การ์ดนักเตะจะถูกสร้างอัตโนมัติจาก JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- =========================================================================
+         5. ส่วนผลงานตั้งแต่อดีตจนถึงปัจจุบัน (HONOURS & TROPHY CABINET)
+         แสดงจำนวนถ้วยรางวัลสำคัญ พร้อมปุ่มคลิกดูรายชื่อปีที่ได้แชมป์
+    ========================================================================== -->
+    <section id="honours" class="py-20 bg-lfc-dark text-white relative overflow-hidden">
+        <!-- แถบตกแต่งสีแดงและทองด้านบน -->
+        <div class="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-lfc-red via-lfc-gold to-lfc-teal"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-3xl mx-auto mb-14">
+                <span class="text-lfc-gold font-bold text-sm uppercase tracking-widest">Trophy Cabinet</span>
+                <h2 class="text-3xl sm:text-4xl font-bold mt-2 mb-4">ทำเนียบแชมป์ตั้งแต่อดีตจนถึงปัจจุบัน</h2>
+                <p class="text-gray-300 text-base sm:text-lg">
+                    ความสำเร็จระดับตำนานที่สร้างชื่อเสียงให้ลิเวอร์พูลเป็นสโมสรที่คว้าแชมป์ระดับเมเจอร์มากที่สุดในเกาะอังกฤษ คลิกที่แต่ละรายการเพื่อดูปีที่คว้าแชมป์
+                </p>
+            </div>
+
+            <!-- Grid ตู้โชว์ถ้วยรางวัล (สร้างจากข้อมูลใน JS) -->
+            <div id="honours-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- การ์ดถ้วยรางวัลจะถูกสร้างอัตโนมัติจาก JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- =========================================================================
+         6. ส่วนติดต่อผู้พัฒนาเว็บไซต์ (DEVELOPER CONTACT SECTION)
+         แสดงข้อมูลผู้พัฒนา: คุณจิตติพัฒน์ แก้วไชยเสน และ Line ID: 0809701904
+    ========================================================================== -->
+    <section id="contact" class="py-20 bg-lfc-gray">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-12">
+                    
+                    <!-- คอลัมน์ซ้าย: ข้อมูลผู้พัฒนาเว็บไซต์ -->
+                    <div class="lg:col-span-5 bg-gradient-to-br from-lfc-red to-lfc-darkRed text-white p-8 sm:p-12 flex flex-col justify-between">
+                        <div>
+                            <div class="inline-flex items-center px-3.5 py-1 rounded-full bg-white/15 text-lfc-lightGold text-xs font-semibold uppercase tracking-wider mb-6">
+                                <i class="fa-solid fa-laptop-code mr-2"></i> Web Developer & UX/UI
+                            </div>
+                            <h2 class="text-2xl sm:text-3xl font-bold mb-3">ติดต่อผู้พัฒนาเว็บไซต์</h2>
+                            <p class="text-white/85 text-sm sm:text-base leading-relaxed mb-8">
+                                หากต้องการสอบถามข้อมูลเพิ่มเติม เสนอแนะการปรับปรุงเว็บไซต์ หรือติดต่อเรื่องงานพัฒนาเว็บไซต์และออกแบบ UX/UI สามารถติดต่อได้โดยตรงตามช่องทางด้านล่างครับ
+                            </p>
+
+                            <!-- การ์ดข้อมูลผู้พัฒนา -->
+                            <div class="space-y-4">
+                                <div class="flex items-start space-x-4 bg-black/20 p-4 rounded-2xl border border-white/10">
+                                    <div class="w-11 h-11 rounded-xl bg-white text-lfc-red flex items-center justify-center shrink-0">
+                                        <i class="fa-solid fa-user-tie text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <span class="text-xs text-white/70 block">ชื่อผู้พัฒนาเว็บไซต์</span>
+                                        <strong class="text-lg font-semibold text-white">คุณจิตติพัฒน์ แก้วไชยเสน</strong>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start space-x-4 bg-black/20 p-4 rounded-2xl border border-white/10">
+                                    <div class="w-11 h-11 rounded-xl bg-[#06C755] text-white flex items-center justify-center shrink-0">
+                                        <i class="fa-brands fa-line text-2xl"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <span class="text-xs text-white/70 block">เบอร์ไลน์สำหรับติดต่อ</span>
+                                        <div class="flex flex-wrap items-center gap-2 mt-0.5">
+                                            <strong id="dev-line-id" class="text-xl font-display font-bold tracking-wider text-lfc-lightGold">0809701904</strong>
+                                        </div>
+                                        
+                                        <!-- ปุ่มคัดลอกเบอร์ไลน์ และปุ่มเปิดแอป Line -->
+                                        <div class="flex flex-wrap gap-2 mt-3">
+                                            <button onclick="copyLineId()" class="px-3.5 py-2 rounded-lg bg-white text-lfc-dark hover:bg-lfc-lightGold text-xs font-bold transition-colors flex items-center shadow-sm">
+                                                <i class="fa-regular fa-copy mr-1.5"></i> คัดลอกเบอร์ไลน์
+                                            </button>
+                                            <a href="https://line.me/ti/p/~0809701904" target="_blank" rel="noopener noreferrer" class="px-3.5 py-2 rounded-lg bg-[#06C755] hover:bg-[#05b34c] text-white text-xs font-bold transition-colors flex items-center shadow-sm">
+                                                <i class="fa-brands fa-line mr-1.5"></i> แอดไลน์ทันที
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 pt-6 border-t border-white/15 text-xs text-white/70">
+                            พัฒนาด้วยมาตรฐาน Semantic HTML5, Responsive CSS และหลักการ UX/UI Design
+                        </div>
+                    </div>
+
+                    <!-- คอลัมน์ขวา: ฟอร์มส่งข้อความหาผู้พัฒนา -->
+                    <div class="lg:col-span-7 p-8 sm:p-12">
+                        <h3 class="text-2xl font-bold text-lfc-dark mb-2">ส่งข้อความถึงผู้พัฒนา</h3>
+                        <p class="text-gray-600 text-sm mb-6">กรอกรายละเอียดด้านล่างเพื่อส่งข้อความพูดคุยหรือแจ้งข้อเสนอแนะเกี่ยวกับเว็บไซต์</p>
+
+                        <form id="contact-form" onsubmit="handleContactSubmit(event)" class="space-y-5">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <div>
+                                    <label for="sender-name" class="block text-sm font-medium text-gray-700 mb-1.5">ชื่อของคุณ <span class="text-lfc-red">*</span></label>
+                                    <input type="text" id="sender-name" required placeholder="ระบุชื่อ-นามสกุล หรือชื่อเล่น"
+                                        class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-lfc-red focus:border-lfc-red outline-none transition-all">
+                                </div>
+                                <div>
+                                    <label for="sender-contact" class="block text-sm font-medium text-gray-700 mb-1.5">Line ID หรือ เบอร์ติดต่อกลับ <span class="text-lfc-red">*</span></label>
+                                    <input type="text" id="sender-contact" required placeholder="ระบุ Line ID หรือเบอร์โทรศัพท์"
+                                        class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-lfc-red focus:border-lfc-red outline-none transition-all">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="sender-topic" class="block text-sm font-medium text-gray-700 mb-1.5">หัวข้อที่ติดต่อ</label>
+                                <select id="sender-topic" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-lfc-red focus:border-lfc-red outline-none transition-all bg-white">
+                                    <option value="พูดคุยแลกเปลี่ยนเรื่องทีมลิเวอร์พูล">พูดคุยแลกเปลี่ยนเรื่องทีมลิเวอร์พูล (YNWA)</option>
+                                    <option value="เสนอแนะข้อมูลนักเตะ / ประวัติสโมสร">เสนอแนะข้อมูลนักเตะ / ประวัติสโมสรเพิ่มเติม</option>
+                                    <option value="ติดต่อสอบถามเรื่องพัฒนาเว็บไซต์">ติดต่อสอบถามเรื่องพัฒนาเว็บไซต์ / UX-UI</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="sender-message" class="block text-sm font-medium text-gray-700 mb-1.5">ข้อความ <span class="text-lfc-red">*</span></label>
+                                <textarea id="sender-message" rows="4" required placeholder="พิมพ์ข้อความของคุณที่นี่..."
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-lfc-red focus:border-lfc-red outline-none transition-all"></textarea>
+                            </div>
+
+                            <button type="submit" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-lfc-red hover:bg-lfc-darkRed text-white font-semibold shadow-md hover:shadow-lg transition-all flex items-center justify-center">
+                                <i class="fa-solid fa-paper-plane mr-2"></i> ส่งข้อความถึงคุณจิตติพัฒน์
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =========================================================================
+         7. ส่วนท้ายเว็บไซต์ (FOOTER)
+    ========================================================================== -->
+    <footer class="bg-lfc-dark text-gray-400 py-10 border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-lg bg-lfc-red text-white flex items-center justify-center">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div>
+                    <span class="text-white font-bold tracking-wide">LIVERPOOL FC THAILAND</span>
+                    <span class="text-xs block text-gray-400">You'll Never Walk Alone</span>
+                </div>
+            </div>
+
+            <div class="text-sm text-center sm:text-right">
+                <p>ออกแบบและพัฒนาโดย <span class="text-white font-medium">คุณจิตติพัฒน์ แก้วไชยเสน</span> (เบอร์ไลน์: <span class="text-lfc-teal font-semibold">0809701904</span>)</p>
+                <p class="text-xs text-gray-500 mt-1">สร้างขึ้นเพื่อเป็นเว็บไซต์แฟนคลับและกรณีศึกษาด้านการออกแบบ UX/UI</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- =========================================================================
+         8. หน้าต่าง MODAL POPUP สำหรับคลิกอ่านเพิ่มเติม (INTERACTIVE READ MORE MODAL)
+         ใช้ร่วมกันทั้งส่วนประวัติสโมสร, ข้อมูลนักเตะ และรายละเอียดแชมป์
+    ========================================================================== -->
+    <div id="detail-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/70 backdrop-blur-sm" aria-modal="true" role="dialog">
+        <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl modal-animate flex flex-col">
+            <!-- ส่วนหัว Modal -->
+            <div class="bg-gradient-to-r from-lfc-red to-lfc-darkRed text-white px-6 py-5 flex items-center justify-between">
+                <div>
+                    <span id="modal-badge" class="inline-block px-2.5 py-0.5 rounded-md bg-white/20 text-lfc-lightGold text-xs font-semibold uppercase tracking-wider mb-1">หมวดหมู่</span>
+                    <h3 id="modal-title" class="text-xl sm:text-2xl font-bold leading-snug">หัวข้อรายละเอียด</h3>
+                </div>
+                <button onclick="closeModal()" aria-label="ปิดหน้าต่าง" class="w-10 h-10 rounded-full bg-white/15 hover:bg-white/30 flex items-center justify-center text-white transition-colors shrink-0 ml-4">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- เนื้อหาภายใน Modal (เลื่อนอ่านได้ถ้ายาว) -->
+            <div id="modal-body" class="p-6 sm:p-8 overflow-y-auto text-gray-700 space-y-4 leading-relaxed text-base">
+                <!-- เนื้อหาจะถูกแทรกด้วย JavaScript -->
+            </div>
+
+            <!-- ส่วนท้าย Modal -->
+            <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-end">
+                <button onclick="closeModal()" class="px-6 py-2.5 rounded-xl bg-lfc-dark hover:bg-lfc-red text-white font-semibold text-sm transition-colors">
+                    ปิดหน้าต่าง
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         9. กล่องแจ้งเตือนแบบ TOAST NOTIFICATION (ใช้แทน alert() ตามหลัก UX สมัยใหม่)
+    ========================================================================== -->
+    <div id="toast-notification" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-lfc-dark text-white px-5 py-3.5 rounded-2xl shadow-2xl border border-white/10 flex items-center space-x-3">
+            <div class="w-8 h-8 rounded-full bg-lfc-teal flex items-center justify-center text-white shrink-0">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <div>
+                <p id="toast-title" class="text-sm font-bold">สำเร็จ!</p>
+                <p id="toast-message" class="text-xs text-gray-300">ดำเนินการเรียบร้อยแล้ว</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         10. ส่วน JAVASCRIPT สำหรับจัดการข้อมูลและระบบโต้ตอบ (DATA & INTERACTIVITY)
+         * คุณสามารถแก้ไข เพิ่มเติม หรือลบข้อมูลประวัติ นักเตะ และผลงานได้ที่นี่เลยครับ *
+    ========================================================================== -->
+    <script>
+        /* -------------------------------------------------------------------------
+           [ส่วนที่ 1] ข้อมูลประวัติการก่อตั้งและยุคสมัยของสโมสร
+           วิธีเพิ่มหัวข้อประวัติใหม่: คัดลอกบล็อก { ... } แล้วนำไปวางต่อท้ายใน array ด้านล่าง
+        -------------------------------------------------------------------------- */
+        const clubHistoryData = [
+            {
+                id: "hist-1892",
+                year: "ค.ศ. 1892",
+                era: "จุดกำเนิดหงส์แดง",
+                title: "การก่อตั้งสโมสรโดย จอห์น โฮลดิง",
+                summary: "จุดเริ่มต้นของ Liverpool FC จากความขัดแย้งเรื่องค่าเช่าสนามแอนฟิลด์ จนนำไปสู่การสร้างสโมสรฟุตบอลระดับตำนาน",
+                fullContent: `
+                    <p><strong>สโมสรฟุตบอลลิเวอร์พูล (Liverpool Football Club)</strong> ก่อตั้งขึ้นอย่างเป็นทางการเมื่อวันที่ <strong>3 มิถุนายน ค.ศ. 1892</strong> โดย <strong>จอห์น โฮลดิง (John Houlding)</strong> นักธุรกิจและเจ้าของสนามแอนฟิลด์</p>
+                    <p>เดิมทีสนามแอนฟิลด์เป็นรังเหย้าของสโมสรเอฟเวอร์ตัน แต่เกิดความขัดแย้งทางธุรกิจและค่าเช่าสนาม ทำให้เอฟเวอร์ตันย้ายออกไปเล่นที่กูดิสันพาร์ก จอห์น โฮลดิง จึงตัดสินใจก่อตั้งสโมสรฟุตบอลแห่งใหม่ขึ้นมาเพื่อใช้งานสนามแอนฟิลด์ โดยแต่งตั้ง <strong>จอห์น แม็คเคนนา (John McKenna)</strong> เป็นผู้จัดการทีมคนแรก</p>
+                    <p>ลิเวอร์พูลลงแข่งขันในลีกแลงคาเชียร์และคว้าแชมป์ได้ทันทีตั้งแต่ฤดูกาลแรก ก่อนจะได้รับเลือกให้เข้าร่วมฟุตบอลลีกดิวิชัน 2 ในปี 1893 และเลื่อนชั้นสู่ลีกสูงสุดได้สำเร็จอย่างรวดเร็ว</p>
+                `
+            },
+            {
+                id: "hist-1959",
+                year: "ค.ศ. 1959 - 1985",
+                era: "ยุคทอง บิล แชงคลีย์ & บ็อบ เพสลีย์",
+                title: "รากฐานแห่งความยิ่งใหญ่และเจ้าแห่งยุโรป",
+                summary: "บิล แชงคลีย์ พลิกโฉมลิเวอร์พูลจากดิวิชัน 2 สู่แชมป์ลีก ก่อนส่งไม้ต่อให้ บ็อบ เพสลีย์ พาทีมครองความยิ่งใหญ่ในถ้วยยุโรป",
+                fullContent: `
+                    <p>ในเดือนธันวาคม ปี 1959 <strong>บิล แชงคลีย์ (Bill Shankly)</strong> เข้ามารับตำแหน่งผู้จัดการทีมในขณะที่ลิเวอร์พูลจมอยู่ในดิวิชัน 2 เขาได้ปฏิวัติสโมสรใหม่ทั้งหมด ทั้งการสร้างห้องทำงาน <strong>"Boot Room"</strong> การปรับปรุงสนามซ้อมเมลวูด และการเปลี่ยนชุดแข่งเป็น <strong>สีแดงล้วน (All-Red)</strong> ในปี 1964 เพื่อให้ดูน่าเกรงขาม</p>
+                    <p>แชงคลีย์พาลิเวอร์พูลเลื่อนชั้นและคว้าแชมป์ลีกสูงสุดได้ 3 สมัย, เอฟเอ คัพ 2 สมัย และยูฟ่า คัพ 1 สมัย ก่อนจะวางมือในปี 1974</p>
+                    <p>จากนั้นมือขวาของเขา <strong>บ็อบ เพสลีย์ (Bob Paisley)</strong> ก้าวขึ้นมาสานต่อความสำเร็จอย่างเหนือชั้น ตลอด 9 ปีที่คุมทีม เพสลีย์พาลิเวอร์พูลคว้าแชมป์รายการใหญ่ถึง <strong>20 รายการ</strong> รวมถึงแชมป์ลีกสูงสุด 6 สมัย และยูโรเปียน คัพ (ยูฟ่า แชมเปียนส์ลีก) ถึง 3 สมัย</p>
+                `
+            },
+            {
+                id: "hist-2005",
+                year: "ค.ศ. 2005",
+                era: "ปาฏิหาริย์แห่งอิสตันบูล",
+                title: "ค่ำคืนมหัศจรรย์นัดชิงแชมเปียนส์ลีก",
+                summary: "การคัมแบ็กที่ยิ่งใหญ่ที่สุดในประวัติศาสตร์ฟุตบอล จากตามหลัง เอซี มิลาน 0-3 กลับมาตีเสมอและชนะจุดโทษคว้าแชมป์สมัยที่ 5",
+                fullContent: `
+                    <p>วันที่ <strong>25 พฤษภาคม ค.ศ. 2005</strong> ณ สนามอตาเติร์ก โอลิมปิก สเตเดียม เมืองอิสตันบูล ประเทศตุรกี ลิเวอร์พูลภายใต้การคุมทีมของ <strong>ราฟาเอล เบนิเตซ</strong> และกัปตันทีม <strong>สตีเวน เจอร์ราร์ด</strong> ลงสนามพบกับ เอซี มิลาน ที่เต็มไปด้วยซูเปอร์สตาร์</p>
+                    <p>จบครึ่งแรก ลิเวอร์พูลตกเป็นฝ่ายตามหลังถึง <strong>0-3</strong> แต่ในครึ่งหลังเพียง 6 นาที (นาทีที่ 54 ถึง 60) ลิเวอร์พูลยิงคืนรวดเดียว 3 ประตูจาก สตีเวน เจอร์ราร์ด, วลาดิเมียร์ ซมิเซอร์ และ ชาบี อลอนโซ ตีเสมอเป็น 3-3 ได้อย่างเหลือเชื่อ</p>
+                    <p>เกมยืดเยื้อไปถึงการดวลจุดโทษ และเป็น <strong>เจอร์ซีย์ ดูเด็ค</strong> ผู้รักษาประตูที่โชว์ซูเปอร์เซฟ พาลิเวอร์พูลคว้าแชมป์ยุโรปสมัยที่ 5 และได้รับสิทธิ์ครองถ้วยใบจริงเป็นการถาวร</p>
+                `
+            },
+            {
+                id: "hist-2015",
+                year: "ค.ศ. 2015 - 2024",
+                era: "ยุคสมัยใหม่ของ เยอร์เกน คล็อปป์",
+                title: "ปลดล็อกแชมป์พรีเมียร์ลีกในรอบ 30 ปี",
+                summary: "เปลี่ยนจากผู้สงสัยให้เป็นผู้ศรัทธา คว้าแชมป์ยูฟ่า แชมเปียนส์ลีก สมัยที่ 6 และแชมป์พรีเมียร์ลีกอังกฤษอย่างยิ่งใหญ่",
+                fullContent: `
+                    <p>เดือนตุลาคม ค.ศ. 2015 <strong>เยอร์เกน คล็อปป์ (Jürgen Klopp)</strong> เข้ามาปลุกจิตวิญญาณของแอนฟิลด์ด้วยสไตล์ฟุตบอลเกมรุกดุดัน "Gegenpressing" และประโยคอันโด่งดัง <em>"From Doubters to Believers"</em></p>
+                    <p>คล็อปป์พาลิเวอร์พูลคว้าแชมป์ <strong>ยูฟ่า แชมเปียนส์ลีก สมัยที่ 6</strong> ในปี 2019 ต่อด้วยแชมป์ยูฟ่า ซูเปอร์คัพ และแชมป์สโมสรโลก (FIFA Club World Cup) เป็นครั้งแรกในประวัติศาสตร์สโมสร</p>
+                    <p>และในฤดูกาล <strong>2019/2020</strong> ลิเวอร์พูลก็สามารถยุติการรอคอยอันยาวนาน 30 ปี ด้วยการคว้าแชมป์ <strong>พรีเมียร์ลีกอังกฤษ</strong> ได้สำเร็จอย่างสง่างามด้วยคะแนนสูงถึง 99 คะแนน</p>
+                `
+            },
+            {
+                id: "hist-modern",
+                year: "ยุคปัจจุบัน",
+                era: "ก้าวสู่ยุคใหม่ใต้การนำของ อาร์เนอ สล็อต",
+                title: "เดินหน้าล่าความสำเร็จด้วยขุมกำลังสายเลือดใหม่",
+                summary: "การสานต่อปรัชญาฟุตบอลเกมรุกที่เร้าใจ ผสานประสบการณ์ของรุ่นพี่อย่าง ฟาน ไดค์ และ ซาลาห์ เข้ากับดาวรุ่งพลังหนุ่ม",
+                fullContent: `
+                    <p>หลังจบยุคของ เยอร์เกน คล็อปป์ สโมสรได้แต่งตั้ง <strong>อาร์เนอ สล็อต (Arne Slot)</strong> เฮดโค้ชชาวดัตช์เข้ามาสานต่อความสำเร็จในฐานะ Head Coach คนใหม่</p>
+                    <p>ลิเวอร์พูลในยุคปัจจุบันยังคงยึดมั่นในสไตล์การเล่นที่เน้นการครองบอลเกมรุก ความรวดเร็ว และทีมเวิร์กที่แข็งแกร่ง โดยมีแกนหลักอย่าง <strong>เวอร์จิล ฟาน ไดค์</strong>, <strong>อลิสซอน เบ็คเกอร์</strong> และ <strong>โมฮาเหม็ด ซาลาห์</strong> ประคองรุ่นน้องอย่าง อเล็กซิส แม็ค อัลลิสเตอร์, โดมินิก โซบอสไล, ไรอัน กราเฟนแบร์ก และ โคดี้ กัคโป เพื่อเดินหน้าไล่ล่าถ้วยรางวัลทุกรายการ</p>
+                `
+            }
+        ];
+
+        /* -------------------------------------------------------------------------
+           [ส่วนที่ 2] ข้อมูลรายชื่อผู้เล่นชุดใหญ่ (First Team Squad)
+           positionCode: 'GK' (ผู้รักษาประตู), 'DF' (กองหลัง), 'MF' (กองกลาง), 'FW' (กองหน้า)
+           วิธีเพิ่มนักเตะ: คัดลอกบล็อก { ... } แล้ววางเพิ่มใน array ด้านล่างได้เลย
+        -------------------------------------------------------------------------- */
+        const playersData = [
+            {
+                number: 1,
+                name: "อลิสซอน เบ็คเกอร์",
+                enName: "Alisson Becker",
+                positionCode: "GK",
+                positionName: "ผู้รักษาประตู",
+                nationality: "บราซิล",
+                bio: "ผู้รักษาประตูมือหนึ่งระดับโลก เจ้าของรางวัลถุงมือทองคำและ Yashin Trophy โดดเด่นทั้งการเซฟลูกยิงระยะเผาขน การดวลตัวต่อตัว และการเปิดบอลโต้กลับที่แม่นยำ"
+            },
+            {
+                number: 62,
+                name: "ควีวีน เคลเลเฮอร์",
+                enName: "Caoimhín Kelleher",
+                positionCode: "GK",
+                positionName: "ผู้รักษาประตู",
+                nationality: "ไอร์แลนด์",
+                bio: "ผู้รักษาประตูผลผลิตจากอะคาเดมีของสโมสร ผู้สร้างตำนานเซฟจุดโทษพาทีมคว้าแชมป์คาราบาว คัพ มีปฏิกิริยาที่ว่องไวและใช้เท้าเล่นบอลได้ดีเยี่ยม"
+            },
+            {
+                number: 4,
+                name: "เวอร์จิล ฟาน ไดค์",
+                enName: "Virgil van Dijk",
+                positionCode: "DF",
+                positionName: "กองหลัง (กัปตันทีม)",
+                nationality: "เนเธอร์แลนด์",
+                bio: "กัปตันทีมและหัวใจในแนวรับของลิเวอร์พูล แข็งแกร่งทั้งลูกกลางอากาศ การอ่านเกมที่เฉียบขาด ความนิ่ง และการวางบอลยาวข้ามฟากที่แม่นยำ"
+            },
+            {
+                number: 66,
+                name: "เทรนต์ อเล็กซานเดอร์-อาร์โนลด์",
+                enName: "Trent Alexander-Arnold",
+                positionCode: "DF",
+                positionName: "กองหลัง (รองกัปตันทีม)",
+                nationality: "อังกฤษ",
+                bio: "เด็กปั้นชาวสเกาเซอร์โดยกำเนิด เจ้าของสถิติแอสซิสต์สูงสุดตลอดกาลของกองหลังในพรีเมียร์ลีก โดดเด่นด้วยลูกเปิดด้านข้าง ลูกตั้งเตะ และการจ่ายบอลทะลุช่องระดับเพลย์เมกเกอร์"
+            },
+            {
+                number: 5,
+                name: "อิบราฮิมา โกนาเต้",
+                enName: "Ibrahima Konaté",
+                positionCode: "DF",
+                positionName: "กองหลัง",
+                nationality: "ฝรั่งเศส",
+                bio: "ปราการหลังร่างยักษ์ทีมชาติฝรั่งเศส มีความเร็วสูงในการวิ่งไล่กวดคู่แข่ง แข็งแกร่งในการเข้าปะทะ และจับคู่กับ ฟาน ไดค์ ได้อย่างลงตัว"
+            },
+            {
+                number: 26,
+                name: "แอนดรูว์ โรเบิร์ตสัน",
+                enName: "Andrew Robertson",
+                positionCode: "DF",
+                positionName: "กองหลัง",
+                nationality: "สกอตแลนด์",
+                bio: "แบ็กซ้ายจอมพลังกัปตันทีมชาติสกอตแลนด์ วิ่งไม่มีหมดตลอด 90 นาที เติมเกมรุกริมเส้นได้อย่างดุดันและมีลูกครอสที่อันตราย"
+            },
+            {
+                number: 10,
+                name: "อเล็กซิส แม็ค อัลลิสเตอร์",
+                enName: "Alexis Mac Allister",
+                positionCode: "MF",
+                positionName: "กองกลาง",
+                nationality: "อาร์เจนตินา",
+                bio: "กองกลางแชมป์โลกทีมชาติอาร์เจนตินา ควบคุมจังหวะเกมได้อย่างยอดเยี่ยม มีวิสัยทัศน์การจ่ายบอลที่เฉียบคม และยิงไกลได้ทรงพลัง"
+            },
+            {
+                number: 8,
+                name: "โดมินิก โซบอสไล",
+                enName: "Dominik Szoboszlai",
+                positionCode: "MF",
+                positionName: "กองกลาง",
+                nationality: "ฮังการี",
+                bio: "ผู้สืบทอดเสื้อหมายเลข 8 อันทรงเกียรติ กัปตันทีมชาติฮังการีที่มีพละกำลังในการเพรสซิ่งสูง มีลูกยิงไกลที่หนักหน่วงและการพาบอลขึ้นหน้าที่รวดเร็ว"
+            },
+            {
+                number: 38,
+                name: "ไรอัน กราเฟนแบร์ก",
+                enName: "Ryan Gravenberch",
+                positionCode: "MF",
+                positionName: "กองกลาง",
+                nationality: "เนเธอร์แลนด์",
+                bio: "มิดฟิลด์ดาวรุ่งพรสวรรค์สูง โดดเด่นเรื่องการพลิกบอลหนีตัวประกบในพื้นที่แคบ การตัดบอลในแดนกลาง และการพาบอลทะลุทะลวง"
+            },
+            {
+                number: 3,
+                name: "วาตารุ เอ็นโด",
+                enName: "Wataru Endo",
+                positionCode: "MF",
+                positionName: "กองกลางตัวรับ",
+                nationality: "ญี่ปุ่น",
+                bio: "กัปตันทีมชาติญี่ปุ่นผู้ทุ่มเทเกินร้อยทุกวินาทีในสนาม แข็งแกร่งในการเข้าสกัดบอล อ่านเกมตัดจังหวะคู่แข่ง และเป็นแบบอย่างด้านความเป็นมืออาชีพ"
+            },
+            {
+                number: 11,
+                name: "โมฮาเหม็ด ซาลาห์",
+                enName: "Mohamed Salah",
+                positionCode: "FW",
+                positionName: "กองหน้า / ปีกขวา",
+                nationality: "อียิปต์",
+                bio: "ราชาแห่งอียิปต์ (The Egyptian King) ตำนานดาวยิงสูงสุดของลิเวอร์พูลในยุคพรีเมียร์ลีก โดดเด่นด้วยความเร็ว การจบสกอร์ที่เฉียบคม และการสร้างสรรค์เกมรุก"
+            },
+            {
+                number: 7,
+                name: "หลุยส์ ดิอาซ",
+                enName: "Luis Díaz",
+                positionCode: "FW",
+                positionName: "กองหน้า / ปีกซ้าย",
+                nationality: "โคลอมเบีย",
+                bio: "ปีกจอมลีลาทีมชาติโคลอมเบีย มีทักษะการเลี้ยงบอลผ่านคู่ต่อสู้ที่จัดจ้าน ความคล่องตัวสูง และการวิ่งไล่บีบพื้นที่คู่แข่งอย่างไม่รู้จักเหน็ดเหนื่อย"
+            },
+            {
+                number: 18,
+                name: "โคดี้ กัคโป",
+                enName: "Cody Gakpo",
+                positionCode: "FW",
+                positionName: "กองหน้า",
+                nationality: "เนเธอร์แลนด์",
+                bio: "ตัวรุกสารพัดประโยชน์ทีมชาติเนเธอร์แลนด์ เล่นได้ทั้งฝั่งซ้ายและกองหน้าตัวเป้า มีทักษะการลากตัดเข้าในเพื่อยิงประตูที่เฉียบคม"
+            },
+            {
+                number: 20,
+                name: "ดิโอโก้ โชต้า",
+                enName: "Diogo Jota",
+                positionCode: "FW",
+                positionName: "กองหน้า",
+                nationality: "โปรตุเกส",
+                bio: "เพชฌฆาตในกรอบเขตโทษ จบสกอร์ได้คมกริบทั้งเท้าซ้าย เท้าขวา และลูกโหม่ง แม้รูปร่างไม่สูงใหญ่แต่หาพื้นที่ทำประตูได้อย่างยอดเยี่ยม"
+            },
+            {
+                number: 9,
+                name: "ดาร์วิน นูนเญซ",
+                enName: "Darwin Núñez",
+                positionCode: "FW",
+                positionName: "กองหน้าตัวเป้า",
+                nationality: "อุรุกวัย",
+                bio: "ศูนย์หน้าจอมพลังทีมชาติอุรุกวัย มีความเร็วจัดจ้าน แข็งแกร่งในการปะทะกับกองหลัง และสร้างความปั่นป่วนให้แนวรับคู่แข่งได้ตลอดเวลา"
+            }
+        ];
+
+        /* -------------------------------------------------------------------------
+           [ส่วนที่ 3] ข้อมูลผลงานและถ้วยรางวัล (Honours & Achievements)
+           วิธีแก้ไขจำนวนแชมป์หรือเพิ่มปีที่ได้แชมป์: แก้ไขตัวเลข count และข้อความ years ได้ที่นี่
+        -------------------------------------------------------------------------- */
+        const honoursData = [
+            {
+                title: "ลีกสูงสุดอังกฤษ (First Division / Premier League)",
+                count: "19",
+                unit: "สมัย",
+                icon: "fa-crown",
+                badgeColor: "text-lfc-gold",
+                description: "แชมป์ลีกสูงสุดของประเทศอังกฤษ ตั้งแต่ยุคดิวิชัน 1 จนถึงพรีเมียร์ลีก",
+                years: "1900–01, 1905–06, 1921–22, 1922–23, 1946–47, 1963–64, 1965–66, 1972–73, 1975–76, 1976–77, 1978–79, 1979–80, 1981–82, 1982–83, 1983–84, 1985–86, 1987–88, 1989–90, 2019–20"
+            },
+            {
+                title: "ยูฟ่า แชมเปียนส์ลีก (European Cup / UCL)",
+                count: "6",
+                unit: "สมัย",
+                icon: "fa-trophy",
+                badgeColor: "text-lfc-teal",
+                description: "สโมสรจากอังกฤษที่คว้าแชมป์สโมสรยุโรปถ้วยใหญ่ได้มากที่สุด",
+                years: "1976–77, 1977–78, 1980–81, 1983–84, 2004–05, 2018–19"
+            },
+            {
+                title: "เอฟเอ คัพ (FA Cup)",
+                count: "8",
+                unit: "สมัย",
+                icon: "fa-award",
+                badgeColor: "text-lfc-gold",
+                description: "ถ้วยฟุตบอลน็อกเอาต์ที่เก่าแก่ที่สุดในโลก",
+                years: "1964–65, 1973–74, 1985–86, 1988–89, 1991–92, 2000–01, 2005–06, 2021–22"
+            },
+            {
+                title: "อีเอฟแอล คัพ / ลีกคัพ (League Cup)",
+                count: "10",
+                unit: "สมัย",
+                icon: "fa-medal",
+                badgeColor: "text-lfc-teal",
+                description: "เจ้าของสถิติคว้าแชมป์ลีกคัพมากที่สุดในประวัติศาสตร์อังกฤษ",
+                years: "1980–81, 1981–82, 1982–83, 1983–84, 1994–95, 2000–01, 2002–03, 2011–12, 2021–22, 2023–24"
+            },
+            {
+                title: "ยูฟ่า คัพ / ยูโรปา ลีก (UEFA Cup)",
+                count: "3",
+                unit: "สมัย",
+                icon: "fa-star",
+                badgeColor: "text-lfc-gold",
+                description: "แชมป์การแข่งขันฟุตบอลสโมสรยุโรปถ้วยรอง",
+                years: "1972–73, 1975–76, 2000–01"
+            },
+            {
+                title: "ฟีฟ่า คลับ เวิลด์ คัพ & ยูฟ่า ซูเปอร์คัพ",
+                count: "5",
+                unit: "สมัย",
+                icon: "fa-globe",
+                badgeColor: "text-lfc-teal",
+                description: "แชมป์สโมสรโลก (1 สมัย) และแชมป์ยูฟ่า ซูเปอร์คัพ (4 สมัย)",
+                years: "FIFA Club World Cup: 2019 | UEFA Super Cup: 1977, 2001, 2005, 2019"
+            }
+        ];
+
+        /* -------------------------------------------------------------------------
+           [ส่วนที่ 4] ฟังก์ชันแสดงผล (Render Functions)
+        -------------------------------------------------------------------------- */
+        
+        // 1. แสดงการ์ดประวัติสโมสร
+        function renderHistory() {
+            const container = document.getElementById('history-container');
+            container.innerHTML = clubHistoryData.map((item, index) => `
+                <article class="ux-card bg-white rounded-2xl p-7 shadow-sm border border-gray-100 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3.5 py-1 rounded-full bg-lfc-red/10 text-lfc-red font-bold text-xs tracking-wide">
+                                ${item.year}
+                            </span>
+                            <span class="text-xs font-semibold text-lfc-teal uppercase tracking-wider">
+                                ${item.era}
+                            </span>
+                        </div>
+                        <h3 class="text-xl font-bold text-lfc-dark mb-3 leading-snug">
+                            ${item.title}
+                        </h3>
+                        <p class="text-gray-600 text-sm leading-relaxed mb-6">
+                            ${item.summary}
+                        </p>
+                    </div>
+                    <button onclick="openHistoryModal(${index})" class="w-full py-3 px-4 rounded-xl bg-gray-50 hover:bg-lfc-red text-lfc-red hover:text-white font-semibold text-sm transition-colors flex items-center justify-center border border-gray-200 hover:border-lfc-red">
+                        <span>อ่านเพิ่มเติม</span>
+                        <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+                    </button>
+                </article>
+            `).join('');
+        }
+
+        // 2. แสดงการ์ดรายชื่อนักเตะ (รองรับการกรองตำแหน่ง)
+        function renderPlayers(filter = 'all') {
+            const container = document.getElementById('players-container');
+            const filtered = filter === 'all' 
+                ? playersData 
+                : playersData.filter(p => p.positionCode === filter);
+
+            container.innerHTML = filtered.map((player) => {
+                // หา index จริงใน playersData เพื่อเปิด Modal ได้ถูกต้อง
+                const realIndex = playersData.findIndex(p => p.number === player.number && p.enName === player.enName);
+                
+                // กำหนดสีป้ายตำแหน่งตามหลัก Visual Hierarchy
+                const posColors = {
+                    'GK': 'bg-amber-100 text-amber-800',
+                    'DF': 'bg-teal-100 text-teal-800',
+                    'MF': 'bg-red-100 text-lfc-red',
+                    'FW': 'bg-purple-100 text-purple-800'
+                };
+
+                return `
+                    <div onclick="openPlayerModal(${realIndex})" class="ux-card cursor-pointer bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden group flex flex-col justify-between">
+                        <!-- แถบหมายเลขเสื้อด้านบนการ์ด -->
+                        <div class="bg-gradient-to-r from-lfc-red to-lfc-darkRed p-5 text-white relative overflow-hidden">
+                            <div class="flex justify-between items-start relative z-10">
+                                <span class="px-2.5 py-1 rounded-lg text-xs font-bold ${posColors[player.positionCode] || 'bg-white text-lfc-dark'}">
+                                    ${player.positionName}
+                                </span>
+                                <span class="font-display font-black text-4xl text-white/90 group-hover:text-lfc-lightGold transition-colors">
+                                    #${player.number}
+                                </span>
+                            </div>
+                            <!-- ลายน้ำตัวเลขขนาดใหญ่ด้านหลัง -->
+                            <span class="font-display font-black text-8xl text-white/10 absolute -bottom-4 -right-2 pointer-events-none">
+                                ${player.number}
+                            </span>
+                        </div>
+
+                        <!-- รายละเอียดชื่อและสัญชาติ -->
+                        <div class="p-5 flex-1 flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-lg font-bold text-lfc-dark group-hover:text-lfc-red transition-colors">
+                                    ${player.name}
+                                </h3>
+                                <p class="text-xs font-display font-semibold text-gray-400 uppercase tracking-wider mt-0.5">
+                                    ${player.enName}
+                                </p>
+                                <div class="flex items-center text-xs text-gray-500 mt-3">
+                                    <i class="fa-solid fa-flag text-lfc-teal mr-1.5"></i> สัญชาติ: ${player.nationality}
+                                </div>
+                            </div>
+
+                            <div class="mt-5 pt-3 border-t border-gray-100 flex items-center justify-between text-xs font-semibold text-lfc-red">
+                                <span>ดูประวัตินักเตะ</span>
+                                <i class="fa-solid fa-circle-plus text-base group-hover:scale-110 transition-transform"></i>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ฟังก์ชันกดปุ่มกรองตำแหน่งนักเตะ
+        function filterPlayers(position) {
+            // อัปเดตสถานะปุ่ม Active
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if (btn.dataset.filter === position) {
+                    btn.classList.remove('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200');
+                    btn.classList.add('bg-lfc-red', 'text-white', 'shadow-sm');
+                } else {
+                    btn.classList.remove('bg-lfc-red', 'text-white', 'shadow-sm');
+                    btn.classList.add('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200');
+                }
+            });
+            renderPlayers(position);
+        }
+
+        // 3. แสดงตู้โชว์เกียรติยศและแชมป์
+        function renderHonours() {
+            const container = document.getElementById('honours-container');
+            container.innerHTML = honoursData.map((item, index) => `
+                <div onclick="openHonourModal(${index})" class="ux-card cursor-pointer bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center ${item.badgeColor}">
+                                <i class="fa-solid ${item.icon} text-2xl"></i>
+                            </div>
+                            <div class="text-right">
+                                <span class="font-display font-black text-4xl text-lfc-lightGold">${item.count}</span>
+                                <span class="text-sm text-gray-300 ml-1">${item.unit}</span>
+                            </div>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2 leading-snug">
+                            ${item.title}
+                        </h3>
+                        <p class="text-sm text-gray-400 leading-relaxed mb-5">
+                            ${item.description}
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-white/10 flex items-center justify-between text-xs font-semibold text-lfc-teal">
+                        <span>คลิกดูปีที่คว้าแชมป์ทั้งหมด</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        /* -------------------------------------------------------------------------
+           [ส่วนที่ 5] ระบบเปิด-ปิด Modal Popup สำหรับอ่านเพิ่มเติม
+        -------------------------------------------------------------------------- */
+        const modal = document.getElementById('detail-modal');
+        const modalBadge = document.getElementById('modal-badge');
+        const modalTitle = document.getElementById('modal-title');
+        const modalBody = document.getElementById('modal-body');
+
+        function openModal(badge, title, htmlContent) {
+            modalBadge.textContent = badge;
+            modalTitle.textContent = title;
+            modalBody.innerHTML = htmlContent;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden'; // ป้องกันหน้าเว็บด้านหลังเลื่อนขณะเปิด Modal
+        }
+
+        function closeModal() {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+
+        // ปิด Modal เมื่อคลิกพื้นที่สีดำด้านนอกกล่อง
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        // ปิด Modal เมื่อกดปุ่ม Escape บนคีย์บอร์ด
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                closeModal();
+            }
+        });
+
+        // เปิด Modal ประวัติศาสตร์
+        function openHistoryModal(index) {
+            const item = clubHistoryData[index];
+            openModal(`${item.year} • ${item.era}`, item.title, item.fullContent);
+        }
+
+        // เปิด Modal ข้อมูลนักเตะ
+        function openPlayerModal(index) {
+            const p = playersData[index];
+            const content = `
+                <div class="flex flex-wrap gap-3 mb-4">
+                    <span class="px-3 py-1 rounded-lg bg-lfc-red text-white text-sm font-bold">หมายเลขเสื้อ #${p.number}</span>
+                    <span class="px-3 py-1 rounded-lg bg-lfc-teal/15 text-lfc-teal text-sm font-bold">${p.positionName}</span>
+                    <span class="px-3 py-1 rounded-lg bg-gray-100 text-gray-700 text-sm font-medium">สัญชาติ: ${p.nationality}</span>
+                </div>
+                <h4 class="text-lg font-bold text-lfc-dark mb-2">ข้อมูลและจุดเด่นในสนาม (${p.enName})</h4>
+                <p class="text-gray-700 leading-relaxed">${p.bio}</p>
+            `;
+            openModal('First Team Player', p.name, content);
+        }
+
+        // เปิด Modal รายละเอียดแชมป์
+        function openHonourModal(index) {
+            const h = honoursData[index];
+            const content = `
+                <div class="bg-lfc-gray p-5 rounded-2xl border border-gray-200 mb-4 flex items-center justify-between">
+                    <div>
+                        <span class="text-xs text-gray-500 block">จำนวนแชมป์ทั้งหมด</span>
+                        <strong class="text-2xl font-bold text-lfc-red">${h.count} ${h.unit}</strong>
+                    </div>
+                    <i class="fa-solid ${h.icon} text-4xl text-lfc-gold"></i>
+                </div>
+                <p class="text-gray-700 mb-4">${h.description}</p>
+                <h4 class="font-bold text-lfc-dark mb-2">ฤดูกาล / ปีที่คว้าแชมป์:</h4>
+                <div class="p-4 rounded-xl bg-red-50/60 border border-red-100 text-lfc-dark font-medium leading-relaxed">
+                    ${h.years}
+                </div>
+            `;
+            openModal('Honours & Achievements', h.title, content);
+        }
+
+        /* -------------------------------------------------------------------------
+           [ส่วนที่ 6] ระบบคัดลอกเบอร์ไลน์, ฟอร์มติดต่อ และเมนูมือถือ
+        -------------------------------------------------------------------------- */
+        
+        // ฟังก์ชันคัดลอกเบอร์ไลน์ลง Clipboard (รองรับทั้งเบราว์เซอร์สมัยใหม่และ iFrame)
+        function copyLineId() {
+            const linePhone = "0809701904";
+            const tempInput = document.createElement("input");
+            tempInput.value = linePhone;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            tempInput.setSelectionRange(0, 99999);
+            try {
+                document.execCommand("copy");
+                showToast("คัดลอกเบอร์ไลน์สำเร็จ!", "คัดลอกเบอร์ไลน์ 0809701904 เรียบร้อย สามารถนำไปค้นหาด้วยหมายเลขโทรศัพท์ใน Line ได้เลยครับ");
+            } catch (err) {
+                showToast("เบอร์ไลน์: 0809701904", "กรุณาคัดลอกเบอร์ไลน์เพื่อติดต่อคุณจิตติพัฒน์");
+            }
+            document.body.removeChild(tempInput);
+        }
+
+        // ฟังก์ชันจัดการเมื่อกดส่งฟอร์มติดต่อ
+        function handleContactSubmit(event) {
+            event.preventDefault();
+            const name = document.getElementById('sender-name').value;
+            showToast(
+                "ส่งข้อความเรียบร้อยแล้ว!", 
+                `ขอบคุณคุณ ${name} ข้อความของคุณถูกบันทึกถึงคุณจิตติพัฒน์ แก้วไชยเสน เรียบร้อยครับ`
+            );
+            document.getElementById('contact-form').reset();
+        }
+
+        // ฟังก์ชันแสดงกล่องแจ้งเตือน Toast Notification
+        let toastTimeout;
+        function showToast(title, message) {
+            const toast = document.getElementById('toast-notification');
+            document.getElementById('toast-title').textContent = title;
+            document.getElementById('toast-message').textContent = message;
+            
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 4000);
+        }
+
+        // ระบบเปิด-ปิดเมนูมือถือ (Hamburger Menu)
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuIcon = document.getElementById('mobile-menu-icon');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            const isHidden = mobileMenu.classList.contains('hidden');
+            if (isHidden) {
+                mobileMenu.classList.remove('hidden');
+                mobileMenuIcon.classList.remove('fa-bars');
+                mobileMenuIcon.classList.add('fa-xmark');
+            } else {
+                mobileMenu.classList.add('hidden');
+                mobileMenuIcon.classList.remove('fa-xmark');
+                mobileMenuIcon.classList.add('fa-bars');
+            }
+        });
+
+        // ปิดเมนูมือถืออัตโนมัติเมื่อคลิกลิงก์นำทาง
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                mobileMenuIcon.classList.remove('fa-xmark');
+                mobileMenuIcon.classList.add('fa-bars');
+            });
+        });
+
+        // เริ่มต้นแสดงข้อมูลทั้งหมดเมื่อโหลดหน้าเว็บเสร็จ
+        document.addEventListener('DOMContentLoaded', () => {
+            renderHistory();
+            renderPlayers('all');
+            renderHonours();
+        });
+    </script>
+</body>
+</html>
